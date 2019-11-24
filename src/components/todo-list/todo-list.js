@@ -3,7 +3,7 @@ import React from 'react';
 import TodoListItem from '../todo-list-item';
 import './todo-list.css';
 
-const TodoList = ({ todos, onDelete, onClickLabel, onMarkClick, filter }) => {
+const TodoList = ({ todos, onDelete, onClickLabel, onMarkClick, filter, searchFilter }) => {
 
   let newEls = [];
   switch (filter) {
@@ -18,6 +18,10 @@ const TodoList = ({ todos, onDelete, onClickLabel, onMarkClick, filter }) => {
     default:
         newEls = todos;
     break;
+  }
+
+  if(searchFilter.length >= 3){
+    newEls = newEls.filter(el => el.label.toLowerCase().includes(searchFilter.toLowerCase()));
   }
 
   const elements = newEls.map((item) => {

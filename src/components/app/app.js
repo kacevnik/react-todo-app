@@ -34,7 +34,8 @@ export default class App extends Component {
       this.addNewItem('Make Awesome App'),
       this.addNewItem('Have a lunch')
     ],
-    filter: 'all'
+    filter: 'all',
+    search: ''
   }
 
   addItem = (text) => {
@@ -78,15 +79,25 @@ export default class App extends Component {
     });
   }
 
+  onSearch = (text) => {
+    this.setState(({search}) => {
+      return {
+        search: text
+      }
+    });
+  }
+
   render(){
-    const {todoData, filter} = this.state;
+    const {todoData, filter, search} = this.state;
     const countDone = todoData.filter(el => el.done).length;
     const countTodo = todoData.length - countDone;
     return (
       <div className="todo-app">
         <AppHeader toDo={countTodo} done={countDone} />
         <div className="top-panel d-flex">
-          <SearchPanel />
+          <SearchPanel
+            onSearchChange={this.onSearch}
+          />
           <ItemStatusFilter
             onFilter={this.onFilter}
             filter={filter}
@@ -99,6 +110,7 @@ export default class App extends Component {
           onClickLabel={this.onClickLabel}
           onMarkClick={this.onMarkClick}
           filter={filter}
+          searchFilter={search}
         />
         <ItemAddForm
           onAddItem={this.addItem}
