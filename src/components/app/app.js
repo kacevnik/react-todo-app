@@ -33,7 +33,8 @@ export default class App extends Component {
       this.addNewItem('Drink Coffee'),
       this.addNewItem('Make Awesome App'),
       this.addNewItem('Have a lunch')
-    ]
+    ],
+    filter: 'all'
   }
 
   addItem = (text) => {
@@ -69,8 +70,16 @@ export default class App extends Component {
     });
   }
 
+  onFilter = (text) => {
+    this.setState(({filter}) => {
+      return {
+        filter: text
+      }
+    });
+  }
+
   render(){
-    const {todoData} = this.state;
+    const {todoData, filter} = this.state;
     const countDone = todoData.filter(el => el.done).length;
     const countTodo = todoData.length - countDone;
     return (
@@ -78,7 +87,10 @@ export default class App extends Component {
         <AppHeader toDo={countTodo} done={countDone} />
         <div className="top-panel d-flex">
           <SearchPanel />
-          <ItemStatusFilter />
+          <ItemStatusFilter
+            onFilter={this.onFilter}
+            filter={filter}
+          />
         </div>
   
         <TodoList
@@ -86,6 +98,7 @@ export default class App extends Component {
           onDelete={this.deleteItem}
           onClickLabel={this.onClickLabel}
           onMarkClick={this.onMarkClick}
+          filter={filter}
         />
         <ItemAddForm
           onAddItem={this.addItem}

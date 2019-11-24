@@ -3,9 +3,24 @@ import React from 'react';
 import TodoListItem from '../todo-list-item';
 import './todo-list.css';
 
-const TodoList = ({ todos, onDelete, onClickLabel, onMarkClick }) => {
+const TodoList = ({ todos, onDelete, onClickLabel, onMarkClick, filter }) => {
 
-  const elements = todos.map((item) => {
+  let newEls = [];
+  switch (filter) {
+    case 'active':
+      newEls = todos.filter(el => !el.done);
+    break;
+
+    case 'done':
+      newEls = todos.filter(el => el.done);
+    break;
+  
+    default:
+        newEls = todos;
+    break;
+  }
+
+  const elements = newEls.map((item) => {
     const { id, ...itemProps } = item;
 
     return (
