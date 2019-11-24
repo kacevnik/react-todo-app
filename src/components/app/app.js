@@ -21,6 +21,13 @@ export default class App extends Component {
     }
   }
 
+  toggleDoneImportant(data, id, active) {
+    return data.map(el => {
+      if(el.id === id) el[active] = !el[active];
+      return el;
+    });
+  }
+
   state = {
     todoData: [
       this.addNewItem('Drink Coffee'),
@@ -46,11 +53,29 @@ export default class App extends Component {
     });
   }
 
+  onClickLabel = (id) => {
+    this.setState(({todoData}) => {
+      return {
+        todoData: this.toggleDoneImportant(todoData, id, 'done')
+      }
+    });
+  }
+
+  onMarkClick = (id) => {
+    this.setState(({todoData}) => {
+      return {
+        todoData: this.toggleDoneImportant(todoData, id, 'important')
+      }
+    });
+  }
+
   render(){
     const {todoData} = this.state;
+    const countDone = todoData.filter(el => el.done).length;
+    const countTodo = todoData.length - countDone;
     return (
       <div className="todo-app">
-        <AppHeader toDo={1} done={3} />
+        <AppHeader toDo={countTodo} done={countDone} />
         <div className="top-panel d-flex">
           <SearchPanel />
           <ItemStatusFilter />
@@ -59,6 +84,8 @@ export default class App extends Component {
         <TodoList
           todos={todoData}
           onDelete={this.deleteItem}
+          onClickLabel={this.onClickLabel}
+          onMarkClick={this.onMarkClick}
         />
         <ItemAddForm
           onAddItem={this.addItem}
